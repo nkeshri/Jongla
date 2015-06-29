@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 
 namespace Jongla_HSL.ViewModel
 {
@@ -39,8 +40,15 @@ namespace Jongla_HSL.ViewModel
                         HSLVehicle hslVehicle = new HSLVehicle();
                         hslVehicle.LineRef = singleVehicle.MonitoredVehicleJourney.LineRef.value;
                         hslVehicle.VehicleRef = singleVehicle.MonitoredVehicleJourney.VehicleRef.value;
+
                         hslVehicle.Latitude = singleVehicle.MonitoredVehicleJourney.VehicleLocation.Latitude;
                         hslVehicle.Longitude = singleVehicle.MonitoredVehicleJourney.VehicleLocation.Longitude;
+                       
+                        BasicGeoposition queryHint = new BasicGeoposition();
+                        queryHint.Latitude = hslVehicle.Latitude;
+                        queryHint.Longitude = hslVehicle.Longitude;
+                        hslVehicle.Location = new Geopoint(queryHint);
+
                         VehicleItems.Add(hslVehicle);
                     }
                 }

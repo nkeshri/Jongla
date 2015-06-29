@@ -11,7 +11,20 @@
 
     <Grid>
         <StackPanel Orientation="Vertical">
-            <Maps:MapControl x:Name="hslMapControl" Height="300"/>
+            <Maps:MapControl x:Name="hslMapControl" Height="300">
+                <Maps:MapItemsControl ItemsSource="{Binding VehicleItems}">
+                    <Maps:MapItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <StackPanel Maps:MapControl.Location="{Binding Location}">
+                                    <Image Source="Assets/pin_map_down.png"/>
+                                <TextBlock Foreground="Red" Text="{Binding LineRef}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </Maps:MapItemsControl.ItemTemplate>
+                </Maps:MapItemsControl>
+            </Maps:MapControl>
             <ListBox x:Name="VehicleListBox" Margin="0"
 				Visibility="Visible"  
 				FontSize="20" ItemsSource="{Binding VehicleItems}" Height="340" Width="401">
@@ -22,12 +35,11 @@
 								Text="{Binding VehicleRef}" TextWrapping="NoWrap" 
 								FontWeight="Bold" />
                             <TextBlock
-								Text="{Binding LineRef}" TextWrapping="NoWrap" 
-								Margin="12,-6,12,0" />
-                            <TextBlock  TextWrapping="NoWrap"  Margin="12,-6,12,0" >
+								Text="{Binding LineRef}" TextWrapping="NoWrap" />
+                            <TextBlock  TextWrapping="NoWrap"  >
 								<Run Text="{Binding Latitude}" />
-								<Run Text=" - "/>
-								<Run Text="{Binding Longitude}"/>
+                                <Run Text=" - " />
+                                <Run Text="{Binding Longitude}" />
                             </TextBlock>
                         </StackPanel>
                     </DataTemplate>

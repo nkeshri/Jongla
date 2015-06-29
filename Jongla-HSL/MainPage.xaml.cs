@@ -55,20 +55,7 @@ namespace Jongla_HSL
             }
             hslMapControl.Center = geoposition.Coordinate.Point;
             hslMapControl.ZoomLevel = 12;
-            for (int i = 0; i < App.VehicleViewModel.VehicleItems.Count; i++)
-            {
-                MapIcon mapIcon = new MapIcon();
-                mapIcon.Image = RandomAccessStreamReference.CreateFromUri(
-                  new Uri("ms-appx:///Assets/pin_map_down.png"));
-                mapIcon.NormalizedAnchorPoint = new Point(0.25, 0.9);
-                BasicGeoposition queryHint = new BasicGeoposition();
-                queryHint.Latitude = App.VehicleViewModel.VehicleItems[i].Latitude;
-                queryHint.Longitude = App.VehicleViewModel.VehicleItems[i].Longitude;
-                Geopoint hintPoint = new Geopoint(queryHint);
-                mapIcon.Location = hintPoint;
-                mapIcon.Title = App.VehicleViewModel.VehicleItems[i].LineRef;
-                hslMapControl.MapElements.Add(mapIcon);
-            }
         }
+
     }
 }

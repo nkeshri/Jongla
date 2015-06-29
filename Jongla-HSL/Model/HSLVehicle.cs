@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Devices.Geolocation;
 
 namespace Jongla_HSL.Model
 {
@@ -50,6 +51,17 @@ namespace Jongla_HSL.Model
             {
                 _Longitude = value;
                 RaisePropertyChanged("Longitude");
+            }
+        }
+
+        private Geopoint _Location;
+        public Geopoint Location
+        {
+            get { return _Location; }
+            set
+            {
+                _Location = value;
+                RaisePropertyChanged("Location");
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
