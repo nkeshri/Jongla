@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Jongla_HSL.Model
 {
-    class HSLVehicle : INotifyPropertyChanged
+    public class HSLVehicle : INotifyPropertyChanged
     {
         private string _VehicleRef;
         public string VehicleRef

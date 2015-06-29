@@ -26,7 +26,18 @@ namespace Jongla_HSL
     public sealed partial class App : Application
     {
         private TransitionCollection transitions;
+        private static ViewModel.HSLVehicleViewModel _VehicleViewModel = null;
+        public static ViewModel.HSLVehicleViewModel VehicleViewModel
+        {
+            get
+            {
+                // Delay creation of the view model until necessary
+                if (_VehicleViewModel == null)
+                    _VehicleViewModel = new ViewModel.HSLVehicleViewModel();
 
+                return _VehicleViewModel;
+            }
+        }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
