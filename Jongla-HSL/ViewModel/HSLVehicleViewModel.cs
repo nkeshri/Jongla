@@ -20,7 +20,7 @@ namespace Jongla_HSL.ViewModel
         }
         public ObservableCollection<HSLVehicle> VehicleItems { get; private set; }
 
-        public async void LoadVehicleDetails()
+        public async Task LoadVehicleDetails()
         {
             HttpClient httpClient = new HttpClient();
             HttpResponseMessage response = await httpClient.GetAsync(" http://dev.hsl.fi/siriaccess/vm/json?operatorRef=HSL");

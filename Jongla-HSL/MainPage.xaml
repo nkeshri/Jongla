@@ -11,7 +11,7 @@
 
     <Grid>
         <StackPanel Orientation="Vertical">
-            <Maps:MapControl Height="300"/>
+            <Maps:MapControl x:Name="hslMapControl" Height="300"/>
             <ListBox x:Name="VehicleListBox" Margin="0"
 				Visibility="Visible"  
 				FontSize="20" ItemsSource="{Binding VehicleItems}" Height="340" Width="401">
