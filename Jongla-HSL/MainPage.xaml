@@ -8,7 +8,7 @@
     x:Class="Jongla_HSL.MainPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+    
     <Grid>
         <StackPanel Orientation="Vertical">
             <Maps:MapControl x:Name="hslMapControl" Height="300">
@@ -31,12 +31,17 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="0,0,0,17" Width="432" Height="100">
-                            <TextBlock
-								Text="{Binding VehicleRef}" TextWrapping="NoWrap" 
-								FontWeight="Bold" />
-                            <TextBlock
-								Text="{Binding LineRef}" TextWrapping="NoWrap" />
+                            <TextBlock TextWrapping="NoWrap" FontWeight="Bold">
+                                <Run Text="VehicleRef - "/>
+                                <Run Text="{Binding VehicleRef}" />
+                            </TextBlock>
+                            <TextBlock TextWrapping="NoWrap">
+                                <Run Text="LineRef - " />
+                                <Run Text="{Binding LineRef}"/>
+                            </TextBlock>
+								
                             <TextBlock  TextWrapping="NoWrap"  >
+                                <Run Text="Location - " />
 								<Run Text="{Binding Latitude}" />
                                 <Run Text=" - " />
                                 <Run Text="{Binding Longitude}" />
