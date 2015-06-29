@@ -30,6 +30,20 @@ namespace Jongla_HSL.ViewModel
                 Stream StreamResponse = await response.Content.ReadAsStreamAsync();
                 DataContractJsonSerializer s = new DataContractJsonSerializer(typeof(RootObject));
                 RootObject returnedData = (RootObject)s.ReadObject(StreamResponse);
+                if(returnedData.Siri.ServiceDelivery.VehicleMonitoringDelivery.Count == 1)
+                {
+                    var AllVehicle = from m in returnedData.Siri.ServiceDelivery.VehicleMonitoringDelivery[0].VehicleActivity
+                                        select m;
+                    foreach(VehicleActivity singleVehicle in AllVehicle)
+                    {
+                        HSLVehicle hslVehicle = new HSLVehicle();
+                        hslVehicle.LineRef = singleVehicle.MonitoredVehicleJourney.LineRef.value;
+                        hslVehicle.VehicleRef = singleVehicle.MonitoredVehicleJourney.VehicleRef.value;
+                        hslVehicle.Latitude = singleVehicle.MonitoredVehicleJourney.VehicleLocation.Latitude;
+                        hslVehicle.Longitude = singleVehicle.MonitoredVehicleJourney.VehicleLocation.Longitude;
+                        VehicleItems.Add(hslVehicle);
+                    }
+                }
             }
             catch(Exception ex)
             {

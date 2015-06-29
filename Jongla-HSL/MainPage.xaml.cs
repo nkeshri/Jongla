@@ -27,6 +27,7 @@ namespace Jongla_HSL
             this.InitializeComponent();
 
             this.NavigationCacheMode = NavigationCacheMode.Required;
+            DataContext = App.VehicleViewModel;
         }
 
         /// <summary>

@@ -1,14 +1,38 @@
 ﻿<Page
-    x:Class="Jongla_HSL.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Jongla_HSL"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Maps="using:Windows.UI.Xaml.Controls.Maps"
+    x:Class="Jongla_HSL.MainPage"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-
+        <StackPanel Orientation="Vertical">
+            <Maps:MapControl Height="300"/>
+            <ListBox x:Name="VehicleListBox" Margin="0"
+				Visibility="Visible"  
+				FontSize="20" ItemsSource="{Binding VehicleItems}" Height="340" Width="401">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,17" Width="432" Height="100">
+                            <TextBlock
+								Text="{Binding VehicleRef}" TextWrapping="NoWrap" 
+								FontWeight="Bold" />
+                            <TextBlock
+								Text="{Binding LineRef}" TextWrapping="NoWrap" 
+								Margin="12,-6,12,0" />
+                            <TextBlock  TextWrapping="NoWrap"  Margin="12,-6,12,0" >
+								<Run Text="{Binding Latitude}" />
+								<Run Text=" - "/>
+								<Run Text="{Binding Longitude}"/>
+                            </TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
     </Grid>
 </Page>
