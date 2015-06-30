@@ -84,6 +84,7 @@ namespace Jongla_HSL.ViewModel
 
         private void updateObservableCollectionVehicles(List<HSLVehicle> listOfNewVehicles)
         {
+            // three list that contains the updated vehicle, newvehicle and the vehicle to be removed
             List<HSLVehicle> updateNewItems = new List<HSLVehicle>();
             List<HSLVehicle> updateOldItems = new List<HSLVehicle>();
             List<HSLVehicle> removeOldItems = new List<HSLVehicle>();
@@ -98,11 +99,14 @@ namespace Jongla_HSL.ViewModel
             {
                 foreach (HSLVehicle item in listOfNewVehicles)
                 {
-                    var oldlocalList  = VehicleItems.Where(i => i.VehicleRef == item.VehicleRef);
+                    //check if any new vehicle data is available
                     if(!VehicleItems.Any(i => i.VehicleRef == item.VehicleRef))
                     {
                         updateNewItems.Add(item);
                     }
+
+                    //check for the already existing vehicle data
+                    var oldlocalList = VehicleItems.Where(i => i.VehicleRef == item.VehicleRef);
                     if (oldlocalList != null)
                     {
                         foreach (HSLVehicle updateItem in oldlocalList)
@@ -111,6 +115,8 @@ namespace Jongla_HSL.ViewModel
                         }
                     }
                 }
+
+                //check for the vehicle data that needs to be removed
                 foreach(HSLVehicle olditem in VehicleItems)
                 {
                     if(!listOfNewVehicles.Any(i => i.VehicleRef == olditem.VehicleRef))
@@ -118,6 +124,8 @@ namespace Jongla_HSL.ViewModel
                         removeOldItems.Add(olditem);
                     }
                 }
+
+                //If the new vehicle data is available, add it to the existing collection
                 if (updateNewItems.Count > 0)
                 {
                     foreach(HSLVehicle item in updateNewItems)
@@ -125,6 +133,8 @@ namespace Jongla_HSL.ViewModel
                         VehicleItems.Add(item);
                     }
                 }
+
+                //If there are old vehicle data that needs to be removed, then remove from the existing collection
                 if (removeOldItems.Count > 0)
                 {
                     for (int i = 0; i < removeOldItems.Count; i++)
@@ -138,6 +148,8 @@ namespace Jongla_HSL.ViewModel
                         }
                     }
                 }
+
+                //Update the old vehicledata if there is any change in their information
                 if (updateOldItems.Count > 0)
                 {
                     foreach (HSLVehicle item in updateOldItems)
