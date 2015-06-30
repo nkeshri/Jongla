@@ -1,5 +1,6 @@
 ﻿using Jongla_HSL.Model;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -19,17 +20,16 @@ namespace Jongla_HSL.ViewModel
             this.VehicleItems = new ObservableCollection<HSLVehicle>();
         }
         public ObservableCollection<HSLVehicle> VehicleItems { get; private set; }
-
+        private List<HSLVehicle> listOfNewVehicles;
         public async Task LoadVehicleDetails()
         {
-            //Clear the list of items if it is not empty
-            if (VehicleItems != null)
-                VehicleItems.Clear();
+            listOfNewVehicles = new List<HSLVehicle>();
 
             //Client request to get the data from the HSL server 
             HttpClient httpClient = new HttpClient();
             httpClient.MaxResponseContentBufferSize = 512000;
-            HttpResponseMessage response = await httpClient.GetAsync(" http://dev.hsl.fi/siriaccess/vm/json?operatorRef=HSL");
+            string uri = "http://dev.hsl.fi/siriaccess/vm/json?operatorRef=HSL&" + DateTime.Now.Ticks.ToString();
+            HttpResponseMessage response = await httpClient.GetAsync(uri);
             try
             {
                 response.EnsureSuccessStatusCode();
@@ -62,11 +62,13 @@ namespace Jongla_HSL.ViewModel
                                 hslVehicle.Location = new Geopoint(queryHint);
 
                                 //Add items to the observable collection
-                                VehicleItems.Add(hslVehicle);
+                                listOfNewVehicles.Add(hslVehicle);
+                                //VehicleItems.Add(hslVehicle);
                             }
+                            updateObservableCollectionVehicles(listOfNewVehicles);
                         });
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Debug.WriteLine(ex.Message);
                     }
@@ -78,6 +80,93 @@ namespace Jongla_HSL.ViewModel
             }
             response.Dispose();
             httpClient.Dispose();
+        }
+
+        private void updateObservableCollectionVehicles(List<HSLVehicle> listOfNewVehicles)
+        {
+            List<HSLVehicle> updateNewItems = new List<HSLVehicle>();
+            List<HSLVehicle> updateOldItems = new List<HSLVehicle>();
+            List<HSLVehicle> removeOldItems = new List<HSLVehicle>();
+            if (VehicleItems.Count == 0)
+            {
+                foreach (HSLVehicle item in listOfNewVehicles)
+                {
+                    VehicleItems.Add(item);
+                }
+            }
+            if (VehicleItems.Count > 0)
+            {
+                foreach (HSLVehicle item in listOfNewVehicles)
+                {
+                    var oldlocalList  = VehicleItems.Where(i => i.VehicleRef == item.VehicleRef);
+                    if(!VehicleItems.Any(i => i.VehicleRef == item.VehicleRef))
+                    {
+                        updateNewItems.Add(item);
+                    }
+                    if (oldlocalList != null)
+                    {
+                        foreach (HSLVehicle updateItem in oldlocalList)
+                        {
+                            updateOldItems.Add(updateItem);
+                        }
+                    }
+                }
+                foreach(HSLVehicle olditem in VehicleItems)
+                {
+                    if(!listOfNewVehicles.Any(i => i.VehicleRef == olditem.VehicleRef))
+                    {
+                        removeOldItems.Add(olditem);
+                    }
+                }
+                if (updateNewItems.Count > 0)
+                {
+                    foreach(HSLVehicle item in updateNewItems)
+                    {
+                        VehicleItems.Add(item);
+                    }
+                }
+                if (removeOldItems.Count > 0)
+                {
+                    for (int i = 0; i < removeOldItems.Count; i++)
+                    {
+                        for (int j = 0; j < VehicleItems.Count; j++)
+                        {
+                            if (removeOldItems[i] == VehicleItems[j])
+                            {
+                                VehicleItems.RemoveAt(j);
+                            }
+                        }
+                    }
+                }
+                if (updateOldItems.Count > 0)
+                {
+                    foreach (HSLVehicle item in updateOldItems)
+                    {
+                        foreach (HSLVehicle olditem in VehicleItems)
+                        {
+                            if (item.VehicleRef == olditem.VehicleRef)
+                            {
+                                if (item.LineRef != olditem.LineRef)
+                                {
+                                    olditem.LineRef = item.LineRef;
+                                }
+                                if (item.Latitude != olditem.Latitude)
+                                {
+                                    olditem.Latitude = item.Latitude;
+                                }
+                                if (item.Longitude != olditem.Longitude)
+                                {
+                                    olditem.Longitude = item.Longitude;
+                                }
+                                if (item.Location != olditem.Location)
+                                {
+                                    olditem.Location = item.Location;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
